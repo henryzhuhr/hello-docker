@@ -6,10 +6,18 @@ import { DefaultTheme } from 'vitepress/theme'
  */
 const sidebar: DefaultTheme.Sidebar = [
   {
-    text: 'Start an adventure',
+    text: '开始',
     items: [
-      { text: 'Intro', link: '/' },
-      { text: 'Environment', link: '/starter' },
+      { text: '简介', link: '/' },
+      { text: '环境准备', link: '/starter' },
+    ]
+  },
+  {
+    text: '基础',
+    items: [
+      { text: '镜像、容器与基础操作', link: '/docker-run' },
+      // { text: 'Dockerfile', link: '/docker-dockerfile' },
+      // { text: 'Docker Compose', link: '/docker-compose' },
     ]
   },
 ]

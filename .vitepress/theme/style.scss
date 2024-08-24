@@ -137,3 +137,19 @@
   --docsearch-primary-color: var(--vp-c-brand-1) !important;
 }
 
+/**
+ * 自定义
+ * -------------------------------------------------------------------------- */
+
+// 在侧边栏的每一个链接前添加点
+.VPSidebarItem.level-1.is-link {
+  .VPLink::before {
+    content: "•";
+    left: 120px;
+    color: var(--vp-input-border-color);
+  }
+
+  .text {
+    padding-left: 10px;
+  }
+}
