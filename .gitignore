@@ -4,3 +4,8 @@ node_modules/
 # --- Vitepress ---
 **/.vitepress/dist
 **/.vitepress/cache
+
+# --- Dev Containers ---
+.vscode-server/
+.dotnet/
+.cache/

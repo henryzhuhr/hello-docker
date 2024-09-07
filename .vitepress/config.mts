@@ -6,16 +6,19 @@ import lightbox from "vitepress-plugin-lightbox"
  */
 const sidebar: DefaultTheme.Sidebar = [
   {
-    text: '开始',
+    collapsed: false,
+    text: '开始', 
     items: [
       { text: '简介', link: '/' },
       { text: '环境准备', link: '/starter' },
+      { text: '在 VSCode 使用 Docker', link: '/develop-in-vscode' },
     ]
   },
   {
+    collapsed: false,
     text: '基础',
     items: [
-      { text: '镜像、容器与基础操作', link: '/docker-run' },
+      { text: '镜像、容器与基础操作', link: '/image-and-container' },
       // { text: 'Dockerfile', link: '/docker-dockerfile' },
       // { text: 'Docker Compose', link: '/docker-compose' },
     ]

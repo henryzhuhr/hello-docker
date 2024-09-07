@@ -1,0 +1,5 @@
+services:
+  ubuntu-dev:
+    build:
+      context: .
+      dockerfile: dockerfiles/Dockerfile

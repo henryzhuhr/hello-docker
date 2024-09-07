@@ -153,3 +153,24 @@
     padding-left: 10px;
   }
 }
+
+// 页面导航栏的第二级标题前添加点
+.VPDocAsideOutline ul.VPDocOutlineItem.root {
+  // .outline-link::before {
+  //   content: "• ";
+  //   color: var(--vp-input-border-color);
+  // }
+
+  .outline-link.active {
+    color: var(--vp-c-brand-1);
+  }
+
+  .outline-link.active::before {
+    color: var(--vp-c-brand-1);
+  }
+}
+
+
+.VPDoc.has-aside .content-container{
+  max-width: 100%;
+}
