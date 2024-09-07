@@ -10,3 +10,8 @@
 pnpm i
 pnpm docs:dev
 ```
+
+
+## 插件
+
+- [vitepress-plugin-lightbox](https://github.com/BadgerHobbs/vitepress-plugin-lightbox)

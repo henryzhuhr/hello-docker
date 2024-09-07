@@ -1,6 +1,6 @@
 import { defineConfig } from 'vitepress'
 import { DefaultTheme } from 'vitepress/theme'
-
+import lightbox from "vitepress-plugin-lightbox"
 /**
  * 侧边栏配置
  */
@@ -69,6 +69,12 @@ export default defineConfig({
   description: "Docker Learning Log",
   srcDir: 'docs',
   themeConfig: themeConfig,
+  markdown: {
+    config: (md) => {
+      // Use lightbox plugin
+      md.use(lightbox, {});
+    },
+  },
   vite: {// Vite 配置选项
     publicDir: '../.vitepress/public', // 相对于 docs 目录
   },
