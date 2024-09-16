@@ -24,9 +24,10 @@ ARG APT_INSTALL_LIST=""
 # 添加开发环境需要的软件
 ARG APT_INSTALL_LIST="$APT_INSTALL_LIST $APT_INSTALL_DEV_LIST"
 
-# 换源，取消注释选择一个
-# ARG MIRRORS_URL="mirrors.ustc.edu.cn"
-ARG MIRRORS_URL="mirrors.tuna.tsinghua.edu.cn"
+# 换源，取消注释选择一个(tuna 在自定义网络下不可访问)
+# ARG MIRRORS_URL="mirrors.tuna.tsinghua.edu.cn"
+ARG MIRRORS_URL="mirrors.ustc.edu.cn"
+
 
 # set -x 选项会使得每个命令在执行前都会被打印出来，报错时会显示是哪个命令出错
 RUN set -x \
@@ -35,11 +36,11 @@ RUN set -x \
     && cp ${APT_DEB822_FILE} ${APT_DEB822_FILE}.bak \
     && sed -i "s#//.*archive.ubuntu.com#//${MIRRORS_URL}#g" ${APT_DEB822_FILE} \
     && sed -i "s#//ports.ubuntu.com#//${MIRRORS_URL}#g" ${APT_DEB822_FILE} \
-    && apt update \
-    && apt upgrade -y \
-    && apt install -y --no-install-recommends ${APT_INSTALL_LIST} \
-    && apt autoremove -y \
-    && apt clean \
+    && apt-get update \
+    && apt-get upgrade -y \
+    && apt-get install -y --no-install-recommends ${APT_INSTALL_LIST} \
+    && apt-get autoremove -y \
+    && apt-get clean \
     && rm -rf /var/lib/apt/lists/* \
     && localedef -i zh_CN -c -f UTF-8 -A /usr/share/locale/locale.alias zh_CN.UTF-8
 

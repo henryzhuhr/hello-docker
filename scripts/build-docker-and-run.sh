@@ -1,4 +1,3 @@
-
 IMAGE_TAG="ubuntu:$(date +%Y-%m%d-%H%M%S)"
 
 ARG_NOCACHE="--no-cache"
