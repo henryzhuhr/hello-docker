@@ -116,7 +116,7 @@ RUN set -x && \
     python3 -m pip cache purge
 
 # # 提升虚拟环境 python 的优先级
-# ENV PATH=${PYTHON_VENV_DIR}/bin:$PATH
+ENV PATH=${PYTHON_VENV_DIR}/bin:$PATH
 
 WORKDIR $USER_HOME
 
