@@ -1,7 +1,6 @@
 # Get the base image
 FROM ubuntu:latest
 
-
 # ============================================================
 #   安装基础的环境 (分为开发环境和部署环境)
 # 「基本系统」软件列表 APT_INSTALL_LIST
@@ -47,10 +46,7 @@ RUN set -x && \
     apt-get autoremove -y && \
     # 清理缓存：
     # - /var/cache/apt/archives/*deb
-    if [ $DEV_MODE = true ]; then \
-        apt-get clean all; \
-        rm -rf /var/lib/apt/lists/*; \
-    fi && \
+    [ $DEV_MODE = true ] && apt-get clean all; rm -rf /var/lib/apt/lists/* && \
     localedef -i zh_CN -c -f UTF-8 -A /usr/share/locale/locale.alias zh_CN.UTF-8 
 
 ENV LANG=zh_CN.utf8
@@ -76,54 +72,39 @@ ARG USER_HOME="/home/${USER_NAME}"
 
 # 删除该用户的密码
 RUN passwd -d ${USER_NAME}
-
 # 切换到 ubuntu 用户
 USER ${USER_NAME}
-
 # #force_color_prompt=yes 取消注释，使得终端提示符有颜色
 RUN sed -i 's/#force_color_prompt=yes/force_color_prompt=yes/g' ${USER_HOME}/.bashrc
-
-
-# ============================================================
-#   工作目录
-# ============================================================
-# 默认的工程目录，可以通过外部传入参数覆盖
-ARG PROJECT_NAME="project"
-ADD . $USER_HOME/$PROJECT_NAME
-WORKDIR $USER_HOME/$PROJECT_NAME
-
 
 # ============================================================
 #   Python 环境
 # ============================================================
+# 切换为 bash 才有 source 命令，否则无法激活虚拟环境
+SHELL [ "/bin/bash", "-c" ]
 # PEP 668 – Python base environments Python 增强提案 (PEP)：https://realpython.com/python-virtual-environments-a-primer/?ref=yaolong.net
 # https://www.adamsdesk.com/posts/resolve-pip-externally-managed-environment
 # 临时解决方案  --ignoreExternallyManagedEnvironment
+ADD . ${USER_HOME}/tmp
 ENV PYTHON_VENV_DIR=$USER_HOME/.venv
-
 ENV PIP_MIRROR="https://mirrors.ustc.edu.cn/pypi/simple"
 RUN set -x && \
     python3 -m venv ${PYTHON_VENV_DIR} --clear && \
     source ${PYTHON_VENV_DIR}/bin/activate && \
     python3 -m pip install -i $PIP_MIRROR -U --upgrade pip setuptools wheel && \
-    # 本层写入 /home/ubuntu/.config/pip/pip.conf 但是在下一层不可见，最终系统也不可见
     python3 -m pip config set global.index-url $PIP_MIRROR && \
-    [[ -f requirements.txt ]] && python3 -m pip install -r requirements.txt || echo "requirements.txt not found, skip install" && \
+    [[ -f ${USER_HOME}/tmp/requirements.txt ]] && python3 -m pip install -r ${USER_HOME}/tmp/requirements.txt || echo "requirements.txt not found, skip install" && \
+    sudo rm -rf ${USER_HOME}/tmp && \
     # 清理缓存，缓存目录：
     # - Linux:   ~/.cache/pip and ~/.cache/pipenv
     # - macOS:   ~/Library/Caches/pip and ~/.cache/pipenv
     # - Windows: %LocalAppData%/pip/Cache
     python3 -m pip cache purge
-
-# # 提升虚拟环境 python 的优先级
+    
+# 提升虚拟环境 python 的优先级
 ENV PATH=${PYTHON_VENV_DIR}/bin:$PATH
 
-WORKDIR $USER_HOME
 
 # CMD [ "/bin/bash", "--login" ]
 # CMD [ "cat", "/etc/os-release" ]
 # CMD [ "uname", "-m" ]
-# CMD [ "cat", "/etc/os-release" ,";","uname", "-m" ]
-# CMD [ "source", "${PYTHON_VENV_DIR}/bin/activate" ]
-# CMD [ "which", "python3" ]
-# ENTRYPOINT [ "which","python3" ]
