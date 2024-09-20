@@ -11,6 +11,8 @@ FROM ubuntu:latest
 #                   - sudo              用于提权
 # 「开发环境」软件列表 APT_INSTALL_DEV_LIST
 #                   - vim nano          编辑器 (ubuntu-server 包含 vi)
+#                   - tree              目录树
+#                   - pciutils          PCI 设备信息
 #                   - git               版本控制工具
 #                   - openssh-client    SSH 客户端 (ubuntu-server 不包含，所以如果使用 git clone 需要安装)
 #                   - python3-dev python3-pip python3.12-venv   Python 环境
@@ -24,7 +26,7 @@ ARG APT_INSTALL_LIST="$APT_INSTALL_LIST ca-certificates locales sudo"
 
 # 「开发环境」中需要的软件列表
 ARG APT_INSTALL_DEV_LIST=""
-ARG APT_INSTALL_DEV_LIST="$APT_INSTALL_DEV_LIST vim nano tree"
+ARG APT_INSTALL_DEV_LIST="$APT_INSTALL_DEV_LIST vim nano tree pciutils"
 ARG APT_INSTALL_DEV_LIST="$APT_INSTALL_DEV_LIST git openssh-client"
 ARG APT_INSTALL_DEV_LIST="$APT_INSTALL_DEV_LIST build-essential cmake"
 ARG APT_INSTALL_DEV_LIST="$APT_INSTALL_DEV_LIST python3-pip python3-venv"
@@ -73,7 +75,7 @@ RUN set -x && \
     $VENV_PYTHON -m pip config set global.index-url $PIP_MIRROR && \
     [ -f $USER_HOME/tmp/requirements.txt ] && $VENV_PYTHON -m pip install -r ${USER_HOME}/tmp/requirements.txt || echo "requirements.txt not found, skip install" && \
     sudo rm -rf $USER_HOME/tmp && \
-    # 清理缓存，缓存目录： - Linux: ~/.cache/pip and ~/.cache/pipenv  - macOS: ~/Library/Caches/pip and ~/.cache/pipenv  - Windows: %LocalAppData%/pip/Cache
+    # 清理缓存，缓存目录： - [Linux]: ~/.cache/pip and ~/.cache/pipenv  - [macOS]: ~/Library/Caches/pip and ~/.cache/pipenv  - [Windows]: %LocalAppData%/pip/Cache
     $VENV_PYTHON -m pip cache purge
 
 # 提升虚拟环境 python 的优先级
