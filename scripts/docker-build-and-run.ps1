@@ -26,6 +26,8 @@ $buildArgs = @(
     "-v", "${PWD}:$WORKDIR", # 挂载当前目录
     "-w", "$WORKDIR",      # 指定工作目录
     "-u", "$USER_NAME",    # 指定用户
+    # [待验证] GPU 支持
+    "--gpus", "all",       # 使用所有GPU [win] 参考 https://docs.docker.com/desktop/gpu/ 配置
     ""
 )
 docker run $buildArgs $IMAGE_TAG /bin/bash --login
