@@ -40,9 +40,7 @@ ENV DEBIAN_FRONTEND=noninteractive
 # set -x 选项会使得每个命令在执行前都会被打印出来，报错时会显示是哪个命令出错
 RUN set -x && \
     sed -i 's/#force_color_prompt=yes/force_color_prompt=yes/g' ${HOME}/.bashrc && \
-    APT_DEB822_FILE="/etc/apt/sources.list.d/ubuntu.sources" && \
-    sed -i "s#//.*archive.ubuntu.com#//${MIRRORS_URL}#g" ${APT_DEB822_FILE} && \
-    sed -i "s#//ports.ubuntu.com#//${MIRRORS_URL}#g" ${APT_DEB822_FILE} && \
+    sed -i -e "s#//.*archive.ubuntu.com#//${MIRRORS_URL}#g" -e "s#//ports.ubuntu.com#//${MIRRORS_URL}#g" /etc/apt/sources.list.d/ubuntu.sources && \
     apt-get update && \
     apt-get upgrade -y && \
     # 开发模式下「基本系统」和「部署环境」的软件列表合并
@@ -54,6 +52,10 @@ RUN set -x && \
     localedef -i zh_CN -c -f UTF-8 -A /usr/share/locale/locale.alias zh_CN.UTF-8 
 
 ENV LANG=zh_CN.utf8
+
+# 系统时间错误可能导致: `tls: failed to verify certificate: x509: certificate signed by unknown authority`
+# 修改时区 (date -R 检查当前时间)
+RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
 
 ARG USER_NAME="root"
 ARG USER_HOME="/${USER_NAME}"

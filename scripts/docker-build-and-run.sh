@@ -1,22 +1,28 @@
-if [ "$(uname -s)" = "MINGW64_NT"* ] || [ "$(uname -s)" = "MSYS_NT"* ]; then
+if [[ "$(uname -s)" = "MINGW64_NT"* ]] || [[ "$(uname -s)" = "MSYS_NT"* ]]; then
     echo "Windows(Git bash) is not supported."
     exit 1
 fi
 
+# ====================================
+#   docker build
+# ====================================
 TAG=$(date +%Y-%m%d-%H%M%S)
 TAG=latest
-IMAGE_TAG="ubuntu:$TAG"
-
+IMAGE_TAG="ubuntu-base:$TAG"
+DOCKERFILE="dockerfiles/Dockerfile"
 
 # 定义构建参数（根据需要取消注释）
 buildArgs=(
     # "--no-cache" # 不使用缓存
-    # "--progress plain" # 显示构建进度
-    # "--platform linux/amd64" # 跨平台构建 x86_64 -- Multi-platform builds: https://docs.docker.com/build/building/multi-platform/
+    # "--progress" "plain" # 显示构建进度
+    # "--platform" "linux/amd64" # 跨平台构建 x86_64 -- Multi-platform builds: https://docs.docker.com/build/building/multi-platform/
 )
-docker build . -t $IMAGE_TAG -f dockerfiles/Dockerfile ${buildArgs[@]}
+docker build . -t $IMAGE_TAG -f $DOCKERFILE ${buildArgs[@]}
 
 
+# ====================================
+#   docker run
+# ====================================
 # USER_NAME=ubuntu
 # WORKDIR=/home/$USER_NAME/$(basename $PWD)  # 挂载的工作目录的权限问题，目前挂载的目录权限是 root，不是ubuntu
 USER_NAME=root
@@ -28,7 +34,7 @@ runArgs=(
     "--rm"  # --rm: Automatically remove the container and its associated anonymous volumes when it exits
     "-v $PWD:$WORKDIR" # 挂载当前目录
     "-w $WORKDIR"      # 指定工作目录
-    "-u $USER_NAME"    # 指定用户
+    # "-u $USER_NAME"    # 指定用户 (default:root)
     ""
 )
 if [ "$(uname -s)" = "Linux" ] && command -v nvidia-smi >/dev/null 2>&1 && nvidia-smi >/dev/null 2>&1; then
@@ -37,5 +43,5 @@ if [ "$(uname -s)" = "Linux" ] && command -v nvidia-smi >/dev/null 2>&1 && nvidi
     runArgs+=("--gpus all -e NVIDIA_DRIVER_CAPABILITIES=compute,utility -e NVIDIA_VISIBLE_DEVICES=all")
 fi
 
-# docker run [OPTIONS]   IMAGE      [COMMAND] [ARG...]
-docker   run ${runArgs[@]} $IMAGE_TAG /bin/bash --login
+# docker run [OPTIONS]     IMAGE      [COMMAND]  [ARG...]
+docker   run ${runArgs[@]} $IMAGE_TAG /bin/bash  --login
