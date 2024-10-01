@@ -55,25 +55,78 @@ sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin 
 
 ## Docker 配置
 
-### 镜像加速
+### 配置文件
 
-编辑 `/etc/docker/daemon.json` 文件，添加如下内容：
-
-```json
-{
-  "registry-mirrors": ["https://registry.docker-cn.com"]
-}
-```
-
-> [!TIP]
-> - Docker Desktop 可以在 `Settings` -> `Docker Engine` 中配置
-> - 2024年6月初，国内镜像服务不再提供服务，需要自己找一些可用的镜像服务。
+编辑 `/etc/docker/daemon.json` 文件配置镜像源
 
 重新加载 systemd 守护进程并重启 Docker（systemd 系统）。对于 Desktop 版本，重启 Docker Desktop 即可。
 
 ```bash
 sudo systemctl daemon-reload
 sudo systemctl restart docker
+```
+
+
+### 镜像源配置
+
+需要自定义网络的情况下，可以编辑 `/etc/docker/daemon.json` 文件配置镜像源
+
+> [!TIP] 一些重要的提示：
+> - 一定要在工作前配置好网络，避免“一杯茶，一包烟，一个镜像拉一天”
+> - 使用 Docker Desktop 的可以在 `Settings` -> `Docker Engine` 中配置
+> - 配置文件遵循严格的 json 规范：（1）文件不可以有注释（2）列表最后一个项目不可以用逗号结束
+> - 代理地址选择一个即可，不需要全部添加，根据自己的网络情况进行选择
+> - 修改地址后可以随便拉去一个镜像测试速度: `docker pull ubuntu:latest && docker images && docker rmi ubuntu:latest; docker images`
+> - 测试的时候可以一组一组地尝试，因为高校和大企业要挂可能一起挂
+
+```json
+{
+  "registry-mirrors": [
+    "https://registry.docker-cn.com", // Docker 中国官方镜像
+    "https://dockerproxy.com",
+    // 一些高校的代理地址
+    "https://docker.mirrors.tuna.tsinghua.edu.cn", // 清华大学
+    "https://docker.nju.edu.cn",                   // 南京大学
+    "https://docker.mirrors.sjtug.sjtu.edu.cn",    // 上海交通大学
+    "https://docker.mirrors.ustc.edu.cn",          // 中国科技大学
+    // 一些大企业的代理地址
+    "https://mirror.ccs.tencentyun.com", // 腾讯
+    "https://mirror.aliyuncs.com",       // 阿里云
+    "https://mirror.baidubce.com",       // 百度
+    "http://hub-mirror.c.163.com",       // 网易云
+    // 其他代理地址
+    "https://docker.m.daocloud.io",    // Daocloud
+    "https://docker.registry.cyou",
+    "https://docker-cf.registry.cyou",
+    "https://dockercf.jsdelivr.fyi",
+    "https://docker.jsdelivr.fyi",
+    "https://dockertest.jsdelivr.fyi",
+    "https://mirror.iscas.ac.cn",
+    "https://docker.rainbond.cc"
+  ],
+  // 可选
+  "max-concurrent-downloads": 10
+}
+```
+
+
+
+
+### insecure-registries
+
+在某次 go install 的时候，遇到了类似如下的错误：`tls: failed to verify certificate: x509: certificate signed by unknown authority`
+
+解决方法是在 Docker Desktop 中添加 `insecure-registries`，如下图所示：
+
+```json
+{
+  // Docker 如果需要从非 SSL 源管理镜像，这里加上。
+  "insecure-registries": [
+    "registry.docker-cn.com",
+    "docker.m.daocloud.io",
+    "goproxy.cn"
+  ]
+}
 ```
 
 
