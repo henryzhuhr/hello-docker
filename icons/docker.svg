@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="_图层_2" data-name="图层_2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 405.47 282">
+  <defs>
+    <style>
+      .cls-1 {
+        stroke: #066da5;
+        stroke-width: 38px;
+      }
+
+      .cls-2 {
+        fill: #066da5;
+      }
+    </style>
+  </defs>
+  <g id="docker">
+    <path class="cls-1" d="M229.47,111h42M179.47,111h42M130.47,111h42M81.47,111h41M31.47,111h42M81.47,65h41M130.47,65h42M179.47,65h42M179.47,19h42"/>
+    <path class="cls-2" d="M405.47,113s-18-17-55-11c-4-29-35-46-35-46,0,0-29,35-8,74-6,3-16,7-31,7H1.47c-5,19-5,145,133,145,99,0,173-46,208-130,52,4,63-39,63-39"/>
+  </g>
+</svg>
