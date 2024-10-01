@@ -1,5 +1,27 @@
 services:
-  ubuntu-dev:
+  hello-docker-ubuntu-dev:
     build:
       context: .
       dockerfile: dockerfiles/Dockerfile
+    image: hello-docker-ubuntu:latest  # 构建后镜像的名称和标签，建议和项目绑定，否则和其他项目冲突
+    restart: unless-stopped # 重启策略
+    environment:
+      APP_NAME: "hello-docker"
+    volumes:
+      - .:/root/hello-docker
+    working_dir: /root/hello-docker
+    # -- 端口映射
+    ports:          
+      - "8080:8080" 
+    # sleep infinity 用于保持容器运行，否则 vscode 无法进入容器
+    command: ["sleep", 'infinity']
+
+
+# -- 网络名称，用于容器间通信
+# networks:
+#   hello-docker-network:
+
+# -- 数据卷名称，用于持久化数据
+# volumes:
+#   hell-docker:  
+  

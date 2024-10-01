@@ -162,6 +162,8 @@ services:
 
 在完成 `如何创建容器` 步骤之后，可以为容器添加额外的功能以便于开发，这些插件可以供开发使用，而不会被包含在 Dockerfile 中，因此不会对部署产生影响。
 
+插件列表：[*Available Dev Container Features*](https://containers.dev/features)
+
 例如在过程中需要获取一些其他仓库，可以添加 `Git` 和 `Git LFS` 插件
 
 > 如果是第一次参考本文创建开发环境，建议跳过这一步，等开发环境确定创建后再添加，以免出现问题
@@ -285,7 +287,18 @@ services:
 
 #### 配置文件说明
 
-配置文件 `.devcontainer/devcontainer.json` 的细节可以参考 [_Dev Container Templates reference_](https://containers.dev/implementors/templates/) 文档
+配置文件 `.devcontainer/devcontainer.json` 的细节可以参考 [*Dev Container Templates reference*](https://containers.dev/implementors/templates/) 文档
+
+下面是一些可能会常用的配置
+
+```json
+{
+  // 停止后
+  "shutdownAction": "stopCompose"
+}
+```
+   
+
 
 <!-- #### docker-compose.yml 文件说明 -->
 
@@ -323,5 +336,6 @@ docker compose up -d [--project-name ubuntu-development]
 
 - [Docker — 从入门到实践](https://yeasy.gitbook.io/docker_practice/install/ubuntu) ([github](https://github.com/yeasy/docker_practice))
 - [Docker Tips (Docker笔记)](https://dockertips.readthedocs.io/en/latest) ([永久域名](https://www.docker.tips))
-- [_Create a development container using Visual Studio Code Remote Development_](https://code.visualstudio.com/docs/devcontainers/create-dev-container)：使用 Dev Containers 插件进行开发的官方文档
-- [_Dev Container Templates reference_](https://containers.dev/implementors/templates/)：Dev Containers 配置文件的细节文档
+- [*Create a development container using Visual Studio Code Remote Development*](https://code.visualstudio.com/docs/devcontainers/create-dev-container)：使用 Dev Containers 插件进行开发的官方文档
+- [*Dev Container Templates reference*](https://containers.dev/implementors/templates/)：Dev Containers 配置文件的细节文档
+- [*Dev Containers tutorial: How it works*](https://code.visualstudio.com/docs/devcontainers/tutorial#_how-it-works)：Dev Containers 插件的工作原理
