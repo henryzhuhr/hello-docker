@@ -69,18 +69,12 @@ sudo systemctl restart docker
 
 ### 镜像源配置
 
-需要自定义网络的情况下，可以编辑 `/etc/docker/daemon.json` 文件配置镜像源
+需要自定义网络的情况下，可以编辑 `/etc/docker/daemon.json` 文件配置镜像源，添加如下内容
 
-> [!TIP] 一些重要的提示：
-> - 一定要在工作前配置好网络，避免“一杯茶，一包烟，一个镜像拉一天”
-> - 使用 Docker Desktop 的可以在 `Settings` -> `Docker Engine` 中配置
-> - 配置文件遵循严格的 json 规范：（1）文件不可以有注释（2）列表最后一个项目不可以用逗号结束
-> - 代理地址选择一个即可，不需要全部添加，根据自己的网络情况进行选择
-> - 修改地址后可以随便拉去一个镜像测试速度: `docker pull ubuntu:latest && docker images && docker rmi ubuntu:latest; docker images`
-> - 测试的时候可以一组一组地尝试，因为高校和大企业要挂可能一起挂
 
 ```json
 {
+  // 其他配置保留，添加如下配置：
   "registry-mirrors": [
     "https://registry.docker-cn.com", // Docker 中国官方镜像
     "https://dockerproxy.com",
@@ -108,6 +102,14 @@ sudo systemctl restart docker
   "max-concurrent-downloads": 10
 }
 ```
+
+> [!TIP] 一些重要的提示：
+> - 一定要在工作前配置好网络，避免“一杯茶，一包烟，一个镜像拉一天”
+> - 使用 Docker Desktop 的可以在 `Settings` -> `Docker Engine` 中配置
+> - 配置文件遵循严格的 json 规范：（1）文件不可以有注释（2）列表最后一个项目不可以用逗号结束
+> - 代理地址选择一个即可，不需要全部添加，根据自己的网络情况进行选择
+> - 修改地址后可以随便拉去一个镜像测试速度: `docker pull ubuntu:latest && docker images && docker rmi ubuntu:latest; docker images`
+> - 测试的时候可以一组一组地尝试，因为高校和大企业要挂可能一起挂
 
 
 
