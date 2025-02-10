@@ -139,3 +139,63 @@ sudo systemctl restart docker
 ```bash
 docker push <username>/<repo>:<tagname>
 ```
+
+
+
+## Docker GPU
+
+
+
+Nvidia GPU 的支持，目前只支持 Linux 系统，需要安装 [`NVIDIA Container Toolkit`](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html#installation)⁠.
+
+
+配置 apt 存储库
+```bash
+curl -fsSL https://nvidia.github.io/libnvidia-container/gpgkey \
+    | sudo gpg --dearmor -o /usr/share/keyrings/nvidia-container-toolkit-keyring.gpg
+curl -s -L https://nvidia.github.io/libnvidia-container/stable/deb/nvidia-container-toolkit.list \
+    | sed 's#deb https://#deb [signed-by=/usr/share/keyrings/nvidia-container-toolkit-keyring.gpg] https://#g' \
+    | sudo tee /etc/apt/sources.list.d/nvidia-container-toolkit.list
+sudo apt-get update
+```
+
+安装 NVIDIA Container Toolkit
+```bash
+sudo apt-get install -y nvidia-container-toolkit
+```
+
+配置 Docker 以使用 Nvidia 驱动程序
+```bash
+sudo nvidia-ctk runtime configure --runtime=docker
+```
+
+执行上述命令后，会在配置文件 `/etc/docker/daemon.json` 中自动添加如下配置
+```json
+{
+  "runtimes": {
+      "nvidia": {
+          "args": [],
+          "path": "nvidia-container-runtime"
+      }
+  }
+}
+```
+
+重启 Docker 服务以使配置生效
+```bash
+sudo systemctl restart docker
+```
+
+随后在启动容器时，使用 `--gpus` 参数指定使用的 GPU 设备
+```bash
+docker run --gpus all ...
+```
+
+如果使用 `docker-compose` 启动容器，需要在 `docker-compose.yml` 文件中添加如下配置
+```yaml
+services:
+  myservice:
+    image: myimage
+    runtime: nvidia  # // [!code ++]
+    ...
+```

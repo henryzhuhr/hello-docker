@@ -7,14 +7,23 @@ services:
     restart: unless-stopped # 重启策略
     environment:
       APP_NAME: "hello-docker"
+      # NVIDIA_VISIBLE_DEVICES: all
+      # NVIDIA_DRIVER_CAPABILITIES: all
     volumes:
       - .:/root/hello-docker
     working_dir: /root/hello-docker
     # -- 端口映射
     ports:          
       - "8080:8080" 
+    # runtime: nvidia  # 使用 nvidia-docker
+    # deploy:
+    #   resources:
+    #     reservations:
+    #       devices:
+    #         - capabilities: [gpu]
     # sleep infinity 用于保持容器运行，否则 vscode 无法进入容器
     command: ["sleep", 'infinity']
+    
 
 
 # -- 网络名称，用于容器间通信
