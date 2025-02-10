@@ -11,6 +11,7 @@ services:
       # NVIDIA_DRIVER_CAPABILITIES: all
     volumes:
       - .:/root/hello-docker
+      - "/etc/localtime:/etc/localtime:ro" # 挂载宿主机时间到容器
     working_dir: /root/hello-docker
     # -- 端口映射
     ports:          
