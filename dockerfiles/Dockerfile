@@ -13,6 +13,8 @@ FROM ubuntu:latest
 #                   - vim nano          编辑器 (ubuntu-server 包含 vi)
 #                   - tree              目录树
 #                   - pciutils          PCI 设备信息
+#                   - iputils-ping      ping 命令
+#                   - bash-completion   bash 补全
 #                   - git               版本控制工具
 #                   - openssh-client    SSH 客户端 (ubuntu-server 不包含，所以如果使用 git clone 需要安装)
 #                   - python3-dev python3-pip python3.12-venv   Python 环境
@@ -26,7 +28,7 @@ ARG APT_INSTALL_LIST="$APT_INSTALL_LIST ca-certificates locales sudo"
 
 # 「开发环境」中需要的软件列表
 ARG APT_INSTALL_DEV_LIST=""
-ARG APT_INSTALL_DEV_LIST="$APT_INSTALL_DEV_LIST vim nano tree pciutils"
+ARG APT_INSTALL_DEV_LIST="$APT_INSTALL_DEV_LIST vim nano tree pciutils iputils-ping bash-completion"
 ARG APT_INSTALL_DEV_LIST="$APT_INSTALL_DEV_LIST git openssh-client"
 ARG APT_INSTALL_DEV_LIST="$APT_INSTALL_DEV_LIST build-essential cmake"
 ARG APT_INSTALL_DEV_LIST="$APT_INSTALL_DEV_LIST python3-pip python3-venv"
@@ -57,6 +59,9 @@ ENV LANG=zh_CN.utf8
 # 修改时区 (date -R 检查当前时间)
 RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
 
+# 启用 bash 补全
+RUN sed -i.bak '/^#if ! shopt -oq posix; then$/,/^#fi$/s/^#//' /etc/bash.bashrc
+
 ARG USER_NAME="root"
 ARG USER_HOME="/${USER_NAME}"
 
@@ -82,3 +87,4 @@ RUN set -x && \
 
 # 提升虚拟环境 python 的优先级
 ENV PATH=${PYTHON_VENV_DIR}/bin:$PATH
+ENV VIRTUAL_ENV_DISABLE_PROMPT=1

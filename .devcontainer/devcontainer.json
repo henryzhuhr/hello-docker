@@ -6,8 +6,7 @@
 	// Update the 'dockerComposeFile' list if you have more compose files or use different names.
 	// The .devcontainer/docker-compose.yml file contains any overrides you need/want to make.
 	"dockerComposeFile": [
-		"../docker-compose.yml",
-		"docker-compose.yml"
+		"../docker-compose.yml"
 	],
 
 	// The 'service' property is the name of the service for the container that VS Code should
@@ -48,7 +47,14 @@
 				"waderyan.gitblame",
 				"ms-vscode-remote.remote-containers",
 				"ms-azuretools.vscode-docker",
-				"Gruntfuggly.todo-tree"
+				"Gruntfuggly.todo-tree",
+				"KevinRose.vsc-python-indent",
+				"njpwerner.autodocstring",
+				"ms-python.black-formatter",
+				"ms-python.mypy-type-checker",
+				"ms-python.vscode-pylance",
+				"ms-python.python",
+				"ms-python.debugpy"
 			]
 		}
 	}

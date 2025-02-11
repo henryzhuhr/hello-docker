@@ -1,1 +1,11 @@
 pyyaml
+
+# mysql
+mysql-connector-python
+
+# redis
+redis
+
+# etcd v3
+etcd3
+protobuf==3.20
