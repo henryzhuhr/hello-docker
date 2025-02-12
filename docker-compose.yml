@@ -54,7 +54,6 @@ services:
 
   redis-server:
     image: redis:latest # https://hub.docker.com/_/redis
-    container_name: redis
     ports:
       - "6379:6379"
 
@@ -69,6 +68,18 @@ services:
     # volumes:
     #   - /path/to/etcd-data:/bitnami/etcd/data # 挂载本地的 /path/to/etcd-data 目录 数据持久化
 
+  # Elasticsearch
+  elasticsearch:
+    image: bitnami/elasticsearch # https://hub.docker.com/r/bitnami/elasticsearch
+    environment:
+      - discovery.type=single-node
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    volumes:
+      - elasticsearch_data:/usr/share/elasticsearch/data
+
+      
 # -- 网络名称，用于容器间通信
 networks:
   hello-docker-network:
@@ -77,4 +88,5 @@ networks:
 volumes:
   hell-docker:
   mysql_data:
+  elasticsearch_data:
   

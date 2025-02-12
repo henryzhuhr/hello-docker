@@ -18,9 +18,13 @@ docker pull bitnami/kafka:3.9
 docker pull bitnami/etcd
 docker pull bitnami/etcd:3.5
 
-# elasticsearch: https://hub.docker.com/_/elasticsearch
-docker pull elasticsearch
-docker pull elasticsearch:8.17.1
+# # elasticsearch: https://hub.docker.com/_/elasticsearch
+# docker pull elasticsearch
+# docker pull elasticsearch:8.17.1
+
+# elasticsearch: https://hub.docker.com/r/bitnami/elasticsearch
+docker pull bitnami/elasticsearch
+docker pull bitnami/elasticsearch:8.17.1
 
 # clickhouse: https://hub.docker.com/r/bitnami/clickhouse
 docker pull bitnami/clickhouse
