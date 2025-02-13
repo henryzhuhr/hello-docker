@@ -9,3 +9,6 @@ redis
 # etcd v3
 etcd3
 protobuf==3.20
+
+# elasticsearch
+elasticsearch

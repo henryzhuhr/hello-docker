@@ -72,10 +72,12 @@ services:
     #   - /path/to/etcd-data:/bitnami/etcd/data # 挂载本地的 /path/to/etcd-data 目录 数据持久化
 
   # Elasticsearch
-  elasticsearch:
+  elasticsearch-server:
     image: bitnami/elasticsearch # https://hub.docker.com/r/bitnami/elasticsearch
     environment:
       - discovery.type=single-node
+    networks:
+      - hello-docker-network
     ports:
       - "9200:9200"
       - "9300:9300"
