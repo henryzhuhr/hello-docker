@@ -21,7 +21,7 @@ services:
       - "/etc/localtime:/etc/localtime:ro" # 挂载宿主机时间到容器
     working_dir: /root/hello-docker
     networks:
-      - hello-docker-network
+      - default
     # -- 端口映射
     ports:          
       - "8080:8080" 
@@ -46,7 +46,7 @@ services:
     ports:
       - "3306:3306"
     networks:
-      - hello-docker-network
+      - default
     volumes:
       - mysql_data:/var/lib/mysql
       # - ./sql/mysql/init.sql:/docker-entrypoint-initdb.d/init.sql  # 初始化数据库脚本
@@ -57,7 +57,7 @@ services:
     ports:
       - "6379:6379"
     networks:
-      - hello-docker-network
+      - default
   etcd-server:
     image: bitnami/etcd:latest
     ports:
@@ -67,7 +67,7 @@ services:
       - ALLOW_NONE_AUTHENTICATION=yes # 允许无认证访问 etcd，适用于开发和测试环境。在生产环境中，建议配置认证机制
       - ETCD_ADVERTISE_CLIENT_URLS=http://etcd:2379 # 指定 etcd 向客户端公开的 URL，这里使用了服务名 etcd，以便在 Docker 网络中进行通信
     networks:
-      - hello-docker-network
+      - default
     # volumes:
     #   - /path/to/etcd-data:/bitnami/etcd/data # 挂载本地的 /path/to/etcd-data 目录 数据持久化
 
@@ -77,14 +77,14 @@ services:
     environment:
       - discovery.type=single-node
     networks:
-      - hello-docker-network
+      - default
     ports:
       - "9200:9200"
       - "9300:9300"
     volumes:
       - elasticsearch_data:/usr/share/elasticsearch/data
 
-  # Milvus
+  # Milvus 单机版(standalone)
   milvus-standalone:
     image: milvusdb/milvus:v2.5.4 # https://hub.docker.com/r/milvusdb/milvus
     platform: linux/amd64  # milvus docker 貌似暂时没支持 arm64
@@ -101,7 +101,7 @@ services:
       - "19530:19530"
       - "9091:9091"
     networks:
-      - hello-docker-network
+      - default
     volumes:
       - milvus_data:/var/lib/milvus
     healthcheck:
@@ -110,7 +110,8 @@ services:
       start_period: 90s
       timeout: 20s
       retries: 3
-    
+  
+  # Milvus 依赖的 Etcd
   milvus-etcd:
     image: quay.io/coreos/etcd:v3.5.16
     environment:
@@ -119,7 +120,7 @@ services:
       - ETCD_QUOTA_BACKEND_BYTES=4294967296
       - ETCD_SNAPSHOT_COUNT=50000
     networks:
-      - hello-docker-network
+      - default
     volumes:
       - milvus_etcd_data:/etcd
     command: etcd -advertise-client-urls=http://127.0.0.1:2379 -listen-client-urls http://0.0.0.0:2379 --data-dir /etcd
@@ -129,6 +130,7 @@ services:
       timeout: 20s
       retries: 3
 
+  # Milvus 依赖的 Minio
   milvus-minio:
     image: minio/minio:RELEASE.2023-03-20T20-16-18Z
     environment:
@@ -141,17 +143,32 @@ services:
       - milvus_minio_data:/minio_data
     command: minio server /minio_data --console-address ":9001"
     networks:
-      - hello-docker-network
+      - default
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
       interval: 30s
       timeout: 20s
       retries: 3
 
+  
+  # Milvus 的可视化管理工具 Attu
+  milvus-attu:
+    image: zilliz/attu:v2.4
+    environment:
+      MILVUS_URL: milvus-standalone:19530
+    ports:
+      - "8000:3000" # 访问地址 http://localhost:8000
+    depends_on:
+      - "milvus-standalone"
+    networks:
+      - default
+
       
 # -- 网络名称，用于容器间通信
 networks:
-  hello-docker-network:
+  default:
+    name: hello-docker-network
+  
 
 # -- 数据卷名称，用于持久化数据
 volumes:
