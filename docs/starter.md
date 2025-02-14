@@ -36,16 +36,22 @@ echo \
 sudo apt-get update
 ```
 
-随后记得将当前用户加入 `docker` 用户组，以便不用 `sudo` 运行 Docker 命令
-
-```bash
-sudo usermod -aG docker $USER
-```
 
 安装 Docker Engine
 
 ```bash
 sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+```
+
+随后记得将当前用户加入 `docker` 用户组，以便不用 `sudo` 运行 Docker 命令
+
+```bash
+# 如果不存在则需要执行 `sudo groupadd docker` 创建
+# sudo gpasswd -a $USER docker
+sudo usermod -aG docker $USER
+
+# 更新用户组信息
+newgrp docker
 ```
 
 ### Docker Desktop

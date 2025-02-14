@@ -34,8 +34,9 @@ services:
     # -- sleep infinity 用于保持容器运行，否则 vscode 无法进入容器
     command: ["sleep", 'infinity']
 
+  # MySQL
   mysql-server:
-    image: mysql:latest # https://hub.docker.com/_/mysql
+    image: mysql:9 # https://hub.docker.com/_/mysql
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-root_secret_password}
@@ -52,12 +53,15 @@ services:
       # - ./sql/mysql/init.sql:/docker-entrypoint-initdb.d/init.sql  # 初始化数据库脚本
       # - ./sql/mysql/sql:/opt/sql  # 初始化数据库脚本
 
+  # Redis
   redis-server:
-    image: redis:latest # https://hub.docker.com/_/redis
+    image: redis:7 # https://hub.docker.com/_/redis
     ports:
       - "6379:6379"
     networks:
       - default
+
+  # Etcd
   etcd-server:
     image: bitnami/etcd:latest
     ports:
@@ -73,7 +77,7 @@ services:
 
   # Elasticsearch
   elasticsearch-server:
-    image: bitnami/elasticsearch:latest # https://hub.docker.com/r/bitnami/elasticsearch
+    image: bitnami/elasticsearch:8.17.1 # https://hub.docker.com/r/bitnami/elasticsearch
     environment:
       - discovery.type=single-node
     networks:
@@ -150,7 +154,6 @@ services:
       timeout: 20s
       retries: 3
 
-  
   # Milvus 的可视化管理工具 Attu
   milvus-attu:
     image: zilliz/attu:v2.4
