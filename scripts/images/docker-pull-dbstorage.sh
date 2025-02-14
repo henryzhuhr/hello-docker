@@ -29,3 +29,7 @@ docker pull bitnami/elasticsearch:8.17.1
 # clickhouse: https://hub.docker.com/r/bitnami/clickhouse
 docker pull bitnami/clickhouse
 docker pull bitnami/clickhouse:25
+
+# milvus: https://hub.docker.com/r/bitnami/milvus
+docker pull --platform linux/amd64 bitnami/milvus
+docker pull --platform linux/amd64 bitnami/milvus:2.5.4

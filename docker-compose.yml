@@ -73,7 +73,7 @@ services:
 
   # Elasticsearch
   elasticsearch-server:
-    image: bitnami/elasticsearch # https://hub.docker.com/r/bitnami/elasticsearch
+    image: bitnami/elasticsearch:latest # https://hub.docker.com/r/bitnami/elasticsearch
     environment:
       - discovery.type=single-node
     networks:
@@ -84,6 +84,17 @@ services:
     volumes:
       - elasticsearch_data:/usr/share/elasticsearch/data
 
+  # Milvus
+  milvus-server:
+    image: bitnami/milvus:2.5.4 # https://hub.docker.com/r/milvusdb/milvus
+    platform: linux/amd64  # milvus docker 貌似暂时没支持 arm64
+    ports:
+      - "19530:19530"
+      - "19121:19121"
+    networks:
+      - hello-docker-network
+    volumes:
+      - milvus_data:/var/lib/milvus
       
 # -- 网络名称，用于容器间通信
 networks:
@@ -91,7 +102,7 @@ networks:
 
 # -- 数据卷名称，用于持久化数据
 volumes:
-  hell-docker:
   mysql_data:
   elasticsearch_data:
+  milvus_data:  # 添加Milvus的数据卷
   
