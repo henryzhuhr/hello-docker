@@ -28,7 +28,7 @@ ARG APT_INSTALL_LIST="$APT_INSTALL_LIST ca-certificates locales sudo"
 
 # 「开发环境」中需要的软件列表
 ARG APT_INSTALL_DEV_LIST=""
-ARG APT_INSTALL_DEV_LIST="$APT_INSTALL_DEV_LIST vim nano tree pciutils iputils-ping bash-completion"
+ARG APT_INSTALL_DEV_LIST="$APT_INSTALL_DEV_LIST vim nano tree pciutils iputils-ping bash-completion dotenv"
 ARG APT_INSTALL_DEV_LIST="$APT_INSTALL_DEV_LIST git openssh-client"
 ARG APT_INSTALL_DEV_LIST="$APT_INSTALL_DEV_LIST build-essential cmake"
 ARG APT_INSTALL_DEV_LIST="$APT_INSTALL_DEV_LIST python3-pip python3-venv"
