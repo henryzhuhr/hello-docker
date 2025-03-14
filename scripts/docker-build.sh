@@ -1,0 +1,1 @@
+docker build -f dockerfiles/Dockerfile . --progress=plain --no-cache
